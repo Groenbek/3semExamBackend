@@ -63,7 +63,7 @@ public class ContactsResourceTest {
 
     // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
-   @BeforeEach
+    @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -74,11 +74,11 @@ public class ContactsResourceTest {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            User user = new User("user", "test");
+            User user = new User("user", "test1");
             user.addRole(userRole);
-            User admin = new User("admin", "test");
+            User admin = new User("admin", "test1");
             admin.addRole(adminRole);
-            User both = new User("user_admin", "test");
+            User both = new User("user_admin", "test1");
             both.addRole(userRole);
             both.addRole(adminRole);
             em.persist(userRole);
@@ -92,7 +92,6 @@ public class ContactsResourceTest {
             em.close();
         }
     }
-
     @Test
     public void testServerIsUp() {
         given().when().get("/contact").then().statusCode(200);
