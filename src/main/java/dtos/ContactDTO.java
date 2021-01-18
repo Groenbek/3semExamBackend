@@ -5,6 +5,9 @@
  */
 package dtos;
 
+import entities.Contact;
+import java.util.List;
+
 /**
  *
  * @author groen
@@ -17,16 +20,18 @@ public class ContactDTO {
     private String company;
     private String jobtitle;
     private String phone;
+    
 
-    public ContactDTO(Long id, String name, String email, String company, String jobtitle, String phone) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.company = company;
-        this.jobtitle = jobtitle;
-        this.phone = phone;
+    public ContactDTO(Contact con) {
+        this.id = con.getId();
+        this.name = con.getName();
+        this.email = con.getEmail();
+        this.company = con.getCompany();
+        this.jobtitle = con.getJobtitle();
+        this.phone = con.getPhone();
     }
 
+    
     
     public Long getId() {
         return id;
@@ -75,7 +80,5 @@ public class ContactDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    
 }
 

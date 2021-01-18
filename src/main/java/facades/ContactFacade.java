@@ -1,9 +1,12 @@
 package facades;
 
 import dtos.ContactDTO;
+//import dtos.OpportunityDTO;
+//import entities.Opportunity;
 import entities.Contact;
 import entities.User;
 import errorhandling.MissingInputException;
+import errorhandling.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -35,6 +38,10 @@ public class ContactFacade {
         }
         return instance;
     }
+     private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+
 // String name, String email, String company, String jobtitle, int phone
     public void addContact(String userName, ContactDTO contactDTO) throws MissingInputException {
         EntityManager em = emf.createEntityManager();
@@ -53,21 +60,73 @@ public class ContactFacade {
             em.close();
         }
     }
-    public List<ContactDTO> getContacts(String userName) {
-        List<ContactDTO> contacts = new ArrayList();
-        EntityManager em = emf.createEntityManager();
+    
+    public List<ContactDTO> getAllContacts() {
+        EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            User user = em.find(User.class, userName);
-            TypedQuery<Contact> userQuery = em.createQuery("SELECT a FROM Contact a WHERE a.user.userName = :username", Contact.class);
-            List<Contact> allContacts = userQuery.setParameter("username", userName).getResultList();
-            for (Contact aContact : allContacts) {
-                contacts.add(new ContactDTO(aContact.getId(), aContact.getName(), aContact.getEmail(), aContact.getCompany(), aContact.getJobtitle(), aContact.getPhone()));
+            TypedQuery<Contact> query = em.createQuery("SELECT a FROM Contact a", Contact.class);
+            List<Contact> contacts = query.getResultList();
+            ArrayList<ContactDTO> ContactDTOList = new ArrayList<ContactDTO>();
+            for(Contact c: contacts){
+                ContactDTOList.add(new ContactDTO(c));
             }
             em.getTransaction().commit();
-            return contacts;
+            return ContactDTOList;
         } finally {
             em.close();
         }
     }
+    
+        public ContactDTO editContact(Contact c) throws MissingInputException, NotFoundException {
+        EntityManager em = getEntityManager();
+        try {
+            Contact contact = em.find(Contact.class, c.getId());
+            if (c == null) {
+                throw new NotFoundException("The chosen action is not possible");
+            }
+            em.getTransaction().begin();
+            contact.setName(c.getName());
+            contact.setEmail(c.getEmail());
+            contact.setCompany(c.getCompany());
+            contact.setJobtitle(c.getJobtitle());
+            contact.setPhone(c.getPhone());
+
+            em.getTransaction().commit();
+            return new ContactDTO(contact);
+        } finally {
+            em.close();
+        }
+        }
+            //Delete Contact by id
+        public ContactDTO deleteContact(Long id) throws MissingInputException {
+        EntityManager em = getEntityManager();
+        try {
+                    em.getTransaction().begin();
+            Contact contact = em.find(Contact.class, id);
+            if (contact == null) {
+                throw new MissingInputException();
+            }
+    
+            em.remove(contact);
+            em.getTransaction().commit();
+            return new ContactDTO(contact);
+        } finally {
+            em.close();
+        }
+    }
+//
+//        public void addOpportunityToContact(OpportunityDTO opportunityDTO, Long id) throws MissingInputException{
+//         EntityManager em = getEntityManager();
+//        try {
+//            em.getTransaction().begin();
+//            
+//           User user = em.find(User.class, id);
+//                Opportunity opportunity = new Opportunity(opportunityDTO.getAmount(), opportunityDTO.getName(), opportunityDTO.getCloseDate());
+//                user.addOpportunityToContact(opportunityDTO);
+//                em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//    }
 }

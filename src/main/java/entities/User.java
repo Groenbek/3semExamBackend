@@ -1,5 +1,6 @@
 package entities;
 
+//import dtos.OpportunityDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,5 +106,4 @@ public class User implements Serializable {
     public List<Contact> getContact() {
         return contacts;
     }
-
 }

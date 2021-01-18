@@ -54,7 +54,6 @@ public class ContactFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Contact.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Role.deleteAllRows").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             user = new User("user", "test1");
             admin = new User("admin", "test1");
@@ -84,27 +83,29 @@ public class ContactFacadeTest {
     public void tearDown() {
 //        Remove any data after each test was run
     }
+    
 
+    
     @Test
-    public void testAddDog() throws MissingInputException {
-        int amountBefore = facade.getContacts(user.getUserName()).size();
-        ContactDTO cDTO = new ContactDTO(null, "Julianna Leifsen", "Julemand@enfindesikke.dk", "Cafe ejer", "CEO", "28624364");
-        facade.addContact(user.getUserName(), cDTO);
-        int amountNow = facade.getContacts(user.getUserName()).size();
-        assertEquals(amountNow, amountBefore + 1);
+    public void testAddContact(){
+        EntityManager em = emf.createEntityManager();
+        Contact con1 = new Contact("Hans", "Hans@hans.dk", "ARLA", "CEO", "48293843");
+        Contact con2 = new Contact("Jytte", "Jytte@hans.dk", "SONY", "CEO", "23456789");
+        try {
+            em.getTransaction().begin();
+            em.persist(con1);
+            em.persist(con2);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        int expectedContacts = 4;
+        assertEquals(expectedContacts, facade.getAllContacts().size(), "Expects 4 people");
     }
-
 //    @Test
-//    public void testAddDogEmptyName() throws MissingInputException {
-//        Assertions.assertThrows(MissingDogInfoException.class, () -> {
-//            ContactDTO cDTO = new ContactDTO(null, "", "the dog", "1234", "12345");
-//            facade.addContact(user.getUserName(), cDTO);
-//        });
+//    public void testGetContacts() {
+//        int actualSize = facade.getAllContacts().size();
+//        int expectedSize = 2;
+//        assertEquals(expectedSize, actualSize, "Expects 2 contacts");
 //    }
-//    
-    @Test
-    public void testGetContacts() {
-        String actualContactName = facade.getContacts(user.getUserName()).get(0).getName();
-        assertEquals("Hans Erik", actualContactName);
-    }
 }

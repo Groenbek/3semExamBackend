@@ -10,14 +10,22 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.ContactDTO;
+import entities.Contact;
 import errorhandling.MissingInputException;
+import errorhandling.NotFoundException;
 import facades.ContactFacade;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -41,6 +49,7 @@ public class ContactResource {
 //    private final AdminFacade adminFacade = AdminFacade.getAdminFacade(EMF);
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    
     @Context
     private UriInfo context;
 
@@ -56,9 +65,10 @@ public class ContactResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("add-contact")
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     public String addContact(String jsonString) throws MissingInputException {
         ContactDTO contactDTO;
+        Contact contact;
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             String userName = json.get("userName").getAsString();
@@ -66,32 +76,44 @@ public class ContactResource {
             String email = json.get("email").getAsString();
             String company = json.get("company").getAsString();
             String jobtitle = json.get("jobtitle").getAsString();
-            String phone = json.get("phone").getAsString();
-            contactDTO = new ContactDTO(null, "name", "email", "company", "jobtitle", "phone");
-            contactFacade.addContact(userName, contactDTO);
+            String phone = json.get("phone").getAsString();            
+            contact = new Contact(name, email, company, jobtitle, phone);
+            ContactDTO cDTO = new ContactDTO(contact);
+            contactFacade.addContact(userName, cDTO);
         } catch (MissingInputException | NullPointerException s) {
             return "{\"msg\":\"Missing contact information!\"}";
         }
         return "{\"msg\":\"Contact added\"}";
+        
+        
     }
 
-//    @GET
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("get-contacts")
+    //@RolesAllowed("user")
+    public String getContacts (String jsonString) {
+        List<ContactDTO> contacts = contactFacade.getAllContacts();
+        return gson.toJson(contacts);
+    }
+    
+    @Path("{id}")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String editContact(@PathParam("id") long id, String name) throws NotFoundException, MissingInputException {
+        Contact contact = GSON.fromJson(name, Contact.class);
+        contact.setId(id);
+        ContactDTO pEdit = contactFacade.editContact(contact);
+        return GSON.toJson(pEdit);
+    }
+    
+//    @Path("{id}")
+//    @DELETE
 //    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("get-dogs/{userName}")
-//    @RolesAllowed("user")
-//    public String getDogs(@PathParam("userName") String userName) {
-//        List<DogDTO> dogs = dogFacade.getDogs(userName);
-//        return gson.toJson(dogs);
+//    public String deleteContact(@PathParam("id") long id, String name) throws NotFoundException {
+//        List
 //    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("get-dogs/breeds")
-//    public String getDogs() throws IOException {
-//        adminFacade.addSearch();
-//        String breeds = HttpUtils.fetchData("https://dog-info.cooljavascript.dk/api/breed");
-//        JsonObject json = JsonParser.parseString(breeds).getAsJsonObject();
-//        return GSON.toJson(json.getAsJsonArray("dogs"));
-//    }
-
+//    
+    
 }

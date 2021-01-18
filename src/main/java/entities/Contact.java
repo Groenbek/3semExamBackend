@@ -1,5 +1,8 @@
 package entities;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +30,42 @@ public class Contact implements Serializable {
     private String jobtitle;
     private String phone;
 
+    
+    
     @ManyToOne
     private User user;
+//    
+//    
+//    
+//    
+//    
+//    @OneToMany(cascade = CascadeType.PERSIST)
+//    List<Opportunity> opportunities;
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    public List<Opportunity> getOpportunities() {
+//        return opportunities;
+//    }
+//
+// 
+//    
+//    public void AddOpportunities(Opportunity opportunities) {
+//        this.opportunities.add(opportunities);
+//        if(opportunities != null) {
+//            opportunities.setContact(this);
+//        }
+//    }
+
+  
 
     public Contact(String name, String email, String company, String jobtitle, String phone) {
         this.name = name;
@@ -36,6 +73,7 @@ public class Contact implements Serializable {
         this.company = company;
         this.jobtitle = jobtitle;
         this.phone = phone;
+        //this.opportunities = new ArrayList<>();
     }
 
     public Contact() {
@@ -96,4 +134,5 @@ public class Contact implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }
