@@ -53,8 +53,9 @@ public class ContactFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Contact.deleteAllRows").executeUpdate();
-            em.createNamedQuery("User.deleteAllRows").executeUpdate();
+            em.createQuery("delete from Contact").executeUpdate(); 
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate(); 
             user = new User("user", "test1");
             admin = new User("admin", "test1");
             both = new User("user_admin", "test1");
