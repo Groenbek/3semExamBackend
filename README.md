@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.com/sslhansen/3semCA3backend.svg?branch=master)](https://travis-ci.com/sslhansen/3semCA3backend)
+[![Build Status](https://travis-ci.com/Groenbek/3semExamBackend.svg?branch=main)](https://travis-ci.com/Groenbek/3semExamBackend)
 
-*This project is meant as start code for semester/exam projects for 3.sem*
+*This project was created from the start code from the semester. And was used for the exam*
 
 ### Preconditions
 *In order to use this code, you should have a docker running, and internet access for extern endpoints*
