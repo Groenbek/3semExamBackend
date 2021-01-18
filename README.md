@@ -2,6 +2,10 @@
 
 *This project was created from the start code from the semester. And was used for the exam*
 
+*3SEM Rasmus Grønbek BACK-end programming exam*
+### *A running version of the back-end code, can be found at https://rallefar.dk/tomcat/3semExamBackend/*
+
+
 ### Preconditions
 *In order to use this code, you should have a docker running, and internet access for extern endpoints*
 *You also need to create a local database called 3semSecurity1 and one called startcode_test*
