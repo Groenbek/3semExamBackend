@@ -34,36 +34,20 @@ public class Contact implements Serializable {
     
     @ManyToOne
     private User user;
-//    
-//    
-//    
-//    
-//    
-//    @OneToMany(cascade = CascadeType.PERSIST)
-//    List<Opportunity> opportunities;
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    public List<Opportunity> getOpportunities() {
-//        return opportunities;
-//    }
-//
-// 
-//    
-//    public void AddOpportunities(Opportunity opportunities) {
-//        this.opportunities.add(opportunities);
-//        if(opportunities != null) {
-//            opportunities.setContact(this);
-//        }
-//    }
+
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.PERSIST)
+    List<Opportunity> opportunities;
+
+    public List<Opportunity> getOpportunities() {
+        return opportunities;
+    }
+
+    public void AddOpportunities(Opportunity opportunities) {
+        this.opportunities.add(opportunities);
+        if(opportunities != null) {
+            opportunities.setContact(this);
+        }
+    }
 
   
 
@@ -73,7 +57,7 @@ public class Contact implements Serializable {
         this.company = company;
         this.jobtitle = jobtitle;
         this.phone = phone;
-        //this.opportunities = new ArrayList<>();
+        this.opportunities = new ArrayList<>();
     }
 
     public Contact() {

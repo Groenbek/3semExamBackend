@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.ContactDTO;
+import dtos.OpportunityDTO;
 import entities.Contact;
 import errorhandling.MissingInputException;
 import errorhandling.NotFoundException;
@@ -107,6 +108,27 @@ public class ContactResource {
         ContactDTO pEdit = contactFacade.editContact(contact);
         return GSON.toJson(pEdit);
     }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("add-opportunity")
+    //@RolesAllowed("user")
+    public String addOpportunity(String jsonString) throws MissingInputException {
+        try {
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+            Long id = json.get("id").getAsLong();
+            int amount = json.get("amount").getAsInt();
+            String name = json.get("name").getAsString();
+            String closeDate = json.get("closeDate").getAsString();
+            OpportunityDTO oDTO = new OpportunityDTO(amount, name, closeDate);
+            contactFacade.addOpportunityToContact(oDTO, id);
+        } catch ( NullPointerException s) {
+            return "{\"msg\":\"Missing contact information!\"}";
+        }
+        return "{\"msg\":\"Opportunity added\"}";
+        
+        
+    }
+    
     
 //    @Path("{id}")
 //    @DELETE

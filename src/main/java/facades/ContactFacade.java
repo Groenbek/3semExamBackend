@@ -1,9 +1,11 @@
 package facades;
 
 import dtos.ContactDTO;
+import dtos.OpportunityDTO;
 //import dtos.OpportunityDTO;
 //import entities.Opportunity;
 import entities.Contact;
+import entities.Opportunity;
 import entities.User;
 import errorhandling.MissingInputException;
 import errorhandling.NotFoundException;
@@ -115,18 +117,18 @@ public class ContactFacade {
             em.close();
         }
     }
-//
-//        public void addOpportunityToContact(OpportunityDTO opportunityDTO, Long id) throws MissingInputException{
-//         EntityManager em = getEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            
-//           User user = em.find(User.class, id);
-//                Opportunity opportunity = new Opportunity(opportunityDTO.getAmount(), opportunityDTO.getName(), opportunityDTO.getCloseDate());
-//                user.addOpportunityToContact(opportunityDTO);
-//                em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
-//    }
+
+        public void addOpportunityToContact(OpportunityDTO opportunityDTO, Long id) throws MissingInputException{
+         EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            
+           Contact contact = em.find(Contact.class, id);
+                Opportunity opportunity = new Opportunity(opportunityDTO.getAmount(), opportunityDTO.getName(), opportunityDTO.getCloseDate());
+                contact.AddOpportunities(opportunity);
+                em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }
