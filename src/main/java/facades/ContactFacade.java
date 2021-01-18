@@ -3,7 +3,7 @@ package facades;
 import dtos.ContactDTO;
 import entities.Contact;
 import entities.User;
-import errorhandling.MissingDogInfoException;
+import errorhandling.MissingInputException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,7 +36,7 @@ public class ContactFacade {
         return instance;
     }
 // String name, String email, String company, String jobtitle, int phone
-    public void addContact(String userName, ContactDTO contactDTO) throws MissingDogInfoException {
+    public void addContact(String userName, ContactDTO contactDTO) throws MissingInputException {
         EntityManager em = emf.createEntityManager();
         try {
             if (!(userName.isEmpty() || contactDTO.getName().isEmpty() || contactDTO.getEmail().isEmpty() || contactDTO.getCompany().isEmpty() || contactDTO.getJobtitle().isEmpty() || contactDTO.getPhone().isEmpty())) {
@@ -46,7 +46,7 @@ public class ContactFacade {
                 user.addContact(contact);
                 em.getTransaction().commit();
             } else {
-                throw new MissingDogInfoException();
+                throw new MissingInputException();
             }
 
         } finally {
