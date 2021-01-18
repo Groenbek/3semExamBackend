@@ -72,6 +72,7 @@ public class ContactsResourceTest {
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
+            
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
             User user = new User("user", "test1");
