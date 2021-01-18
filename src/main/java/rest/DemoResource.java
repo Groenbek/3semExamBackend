@@ -2,13 +2,6 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.RandomJokeDTO;
-import dtos.BoredDTO;
-import dtos.FoodDTO;
-import dtos.CombinedDTO;
-import dtos.KanyeDTO;
-import dtos.QuoteDTO;
-import dtos.RandomDogDTO;
 import entities.User;
 import java.io.IOException;
 import java.util.List;
@@ -80,43 +73,5 @@ public class DemoResource {
     public String getFromAdmin() {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
-    }
-
-    
-    @GET
-    @Path("extern")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJokes() throws IOException {
-        String randomDog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
-        RandomDogDTO randomDogDTO = gson.fromJson(randomDog, RandomDogDTO.class);
-
-        String randomQuote = HttpUtils.fetchData("https://programming-quotes-api.herokuapp.com/quotes/random");
-        QuoteDTO randomQuoteDTO = gson.fromJson(randomQuote, QuoteDTO.class);
-        
-        String food = HttpUtils.fetchData("https://foodish-api.herokuapp.com/api");
-        FoodDTO breakingBadDTO = gson.fromJson(food, FoodDTO.class);
-        
-        String bored = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
-        BoredDTO boredDTO = gson.fromJson(bored, BoredDTO.class);
-        
-        String kanye = HttpUtils.fetchData("https://api.kanye.rest/");
-        KanyeDTO kanyeDTO = gson.fromJson(kanye, KanyeDTO.class);
-        
-        CombinedDTO combined = new CombinedDTO(boredDTO, breakingBadDTO, kanyeDTO, randomQuoteDTO, randomDogDTO);
-        
-        String json = GSON.toJson(combined);
-        return json;
-    }
-    
-    @GET
-    @Path("joke")
-    //@RolesAllowed("user")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJoke() throws IOException {
-        String joke = HttpUtils.fetchData("https://api.chucknorris.io/jokes/random");
-        RandomJokeDTO RandomJokeDTO = gson.fromJson(joke, RandomJokeDTO.class);
-
-        String json = GSON.toJson(RandomJokeDTO);
-        return json;
     }
 }
