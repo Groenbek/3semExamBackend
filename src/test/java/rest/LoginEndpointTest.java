@@ -90,6 +90,7 @@ public class LoginEndpointTest {
         }
     }
 
+    
     //This is how we hold on to the token after login, similar to that a client must store the token somewhere
     private static String securityToken;
 
